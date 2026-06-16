@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'login_page.dart';
+import 'home_page.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -106,7 +106,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => const LoginPage()),
+        MaterialPageRoute(builder: (context) => const HomePage()),
       );
     } on FirebaseAuthException catch (e) {
       String message = 'Registration failed';
@@ -136,7 +136,7 @@ class _RegisterPageState extends State<RegisterPage> {
         fit: StackFit.expand,
         children: [
           Image.asset(
-            'assets/images/Perfume.png',
+            'assets/images/imgs/loading photo.png',
             fit: BoxFit.cover,
           ),
 

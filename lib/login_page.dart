@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'register_page.dart';
+import 'home_page.dart';
+
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -37,10 +39,10 @@ class _LoginPageState extends State<LoginPage> {
       );
 
       // هون حطي صفحة الهوم لما تجهزيها
-      // Navigator.pushReplacement(
-      //   context,
-      //   MaterialPageRoute(builder: (context) => const HomePage()),
-      // );
+       Navigator.pushReplacement(
+         context,
+         MaterialPageRoute(builder: (context) => const HomePage()),
+       );
 
     } on FirebaseAuthException catch (e) {
       String message = 'Login failed';
@@ -134,7 +136,7 @@ class _LoginPageState extends State<LoginPage> {
           Container(
             decoration: const BoxDecoration(
               image: DecorationImage(
-                image: AssetImage('assets/images/Perfume.png'),
+                image: AssetImage('assets/images/imgs/loading photo.png'),
                 fit: BoxFit.cover,
               ),
             ),
