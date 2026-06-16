@@ -3,8 +3,9 @@ import 'product_details_page.dart';
 
 class AllPerfumesPage extends StatefulWidget {
   final String? filterCategory;
+  final String? searchQuery;
 
-  const AllPerfumesPage({super.key, this.filterCategory});
+  const AllPerfumesPage({super.key, this.filterCategory, this.searchQuery});
 
   @override
   State<AllPerfumesPage> createState() => _AllPerfumesPageState();
@@ -12,6 +13,7 @@ class AllPerfumesPage extends StatefulWidget {
 
 class _AllPerfumesPageState extends State<AllPerfumesPage> {
   String selectedCategory = 'All';
+  final TextEditingController _searchController = TextEditingController();
 
   final List<String> categories = ['All', 'Women', 'Men', 'Unisex', 'Luxury'];
 
@@ -152,6 +154,14 @@ class _AllPerfumesPageState extends State<AllPerfumesPage> {
     if (widget.filterCategory != null) {
       selectedCategory = widget.filterCategory!;
     }
+    if (widget.searchQuery != null) {
+      _searchController.text = widget.searchQuery!;
+    }
+  }
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
   }
 
   List<Map<String, dynamic>> get filteredPerfumes {

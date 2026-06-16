@@ -12,6 +12,30 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0;
 
+  final TextEditingController _searchController = TextEditingController();
+  List<Map<String, dynamic>> _filteredPerfumes = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _filteredPerfumes = perfumes;
+    _searchController.addListener(() {
+      setState(() {
+        _filteredPerfumes = perfumes
+            .where((p) => (p['name'] as String)
+            .toLowerCase()
+            .contains(_searchController.text.toLowerCase()))
+            .toList();
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
   final List<Map<String, dynamic>> categories = [
     {'label': 'Women', 'icon': Icons.female},
     {'label': 'Men', 'icon': Icons.male},
@@ -104,7 +128,11 @@ class _HomePageState extends State<HomePage> {
                       _buildCategories(),
 
                       const SizedBox(height: 24),
-                      _buildSectionHeader('Popular Perfumes', onViewAll: () {}),
+                      _buildSectionHeader('Categories', onViewAll: () {
+                        Navigator.push(context, MaterialPageRoute(
+                          builder: (context) => const AllPerfumesPage(),
+                        ));
+                      }),
                       const SizedBox(height: 14),
 
                       // هنا الـ Grid الخاص بالعطور يعمل تلقائياً من القائمة
@@ -176,6 +204,14 @@ class _HomePageState extends State<HomePage> {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: TextField(
+        controller: _searchController,
+        onSubmitted: (value) {
+          if (value.isNotEmpty) {
+            Navigator.push(context, MaterialPageRoute(
+              builder: (context) => AllPerfumesPage(searchQuery: value),
+            ));
+          }
+        },
         style: const TextStyle(color: Colors.white, fontSize: 13),
         decoration: InputDecoration(
           hintText: 'Search perfumes...',
@@ -335,24 +371,33 @@ class _HomePageState extends State<HomePage> {
         itemCount: categories.length,
         padding: const EdgeInsets.symmetric(horizontal: 16),
         itemBuilder: (context, index) {
-          return Container(
-            width: 80,
-            margin: const EdgeInsets.only(right: 16),
-            decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.05),
-              borderRadius: BorderRadius.circular(20),
-              border: Border.all(color: Colors.white.withOpacity(0.1)),
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(categories[index]['icon'], color: Colors.white, size: 28),
-                const SizedBox(height: 8),
-                Text(
-                  categories[index]['label'],
-                  style: const TextStyle(color: Colors.white70, fontSize: 12),
+          return GestureDetector(
+            onTap: () {
+              Navigator.push(context, MaterialPageRoute(
+                builder: (context) => AllPerfumesPage(
+                  filterCategory: categories[index]['label'],
                 ),
-              ],
+              ));
+            },
+            child: Container(
+              width: 80,
+              margin: const EdgeInsets.only(right: 16),
+              decoration: BoxDecoration(
+                color: Colors.white.withOpacity(0.05),
+                borderRadius: BorderRadius.circular(20),
+                border: Border.all(color: Colors.white.withOpacity(0.1)),
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(categories[index]['icon'], color: Colors.white, size: 28),
+                  const SizedBox(height: 8),
+                  Text(
+                    categories[index]['label'],
+                    style: const TextStyle(color: Colors.white70, fontSize: 12),
+                  ),
+                ],
+              ),
             ),
           );
         },
@@ -373,7 +418,7 @@ class _HomePageState extends State<HomePage> {
           crossAxisSpacing: 12,
           mainAxisSpacing: 12,
         ),
-        itemCount: perfumes.length,
+        itemCount: _filteredPerfumes.length,
         itemBuilder: (context, index) {
           return _buildPerfumeCard(index);
         },
@@ -381,14 +426,15 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  // Perfume Card
   Widget _buildPerfumeCard(int index) {
-    final perfume = perfumes[index];
+    final perfume = _filteredPerfumes[index];
     return GestureDetector(                    // ← أضيفي هاد
       onTap: () {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => ProductDetailsPage(perfume: perfumes[index]),
+            builder: (context) => ProductDetailsPage(perfume: _filteredPerfumes[index]),
           ),
         );
       },
