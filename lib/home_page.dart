@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'product_details_page.dart';
+import 'all_perfumes_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -93,7 +95,11 @@ class _HomePageState extends State<HomePage> {
                       const SizedBox(height: 24),
 
                       // هنا قمنا بإعادة استدعاء دالة التصنيفات الصحيحة
-                      _buildSectionHeader('Categories', onViewAll: () {}),
+                      _buildSectionHeader('Popular Perfumes', onViewAll: () {
+                        Navigator.push(context, MaterialPageRoute(
+                          builder: (context) => const AllPerfumesPage(),
+                        ));
+                      }),
                       const SizedBox(height: 14),
                       _buildCategories(),
 
@@ -375,36 +381,45 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  // ── Perfume Card ──
   Widget _buildPerfumeCard(int index) {
     final perfume = perfumes[index];
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.05),
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: Colors.white.withOpacity(0.1)),
-      ),
-      padding: const EdgeInsets.all(12),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Expanded(
-            child: Center(
-              child: Image.asset(perfume['image'], fit: BoxFit.contain),
+    return GestureDetector(                    // ← أضيفي هاد
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ProductDetailsPage(perfume: perfumes[index]),
+          ),
+        );
+      },
+      child: Container(                        // ← خليها child
+        decoration: BoxDecoration(
+          color: Colors.white.withOpacity(0.05),
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(color: Colors.white.withOpacity(0.1)),
+        ),
+        padding: const EdgeInsets.all(12),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              child: Center(
+                child: Image.asset(perfume['image'], fit: BoxFit.contain),
+              ),
             ),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            perfume['name'],
-            style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-          ),
-          Text(
-            perfume['price'],
-            style: const TextStyle(color: Color(0xFFE58AC0), fontWeight: FontWeight.w600),
-          ),
-        ],
+            const SizedBox(height: 8),
+            Text(
+              perfume['name'],
+              style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
+            Text(
+              perfume['price'],
+              style: const TextStyle(color: Color(0xFFE58AC0), fontWeight: FontWeight.w600),
+            ),
+          ],
+        ),
       ),
     );
   }
