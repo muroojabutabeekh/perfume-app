@@ -50,7 +50,7 @@ class _SplashPageState extends State<SplashPage> {
             child: Column(
               children: const [
                 Text(
-                  "AMORA",
+                  "AROMA",
                   style: TextStyle(
                     fontSize: 55,
                     fontWeight: FontWeight.bold,

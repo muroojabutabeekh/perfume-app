@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'product_details_page.dart';
 import 'all_perfumes_page.dart';
+import 'favorites_page.dart';
+import 'favorites_data.dart';
+import 'perfumes_data.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -43,50 +46,7 @@ class _HomePageState extends State<HomePage> {
     {'label': 'Luxury', 'icon': Icons.diamond_outlined},
   ];
 
-  final List<Map<String, dynamic>> perfumes = [
-    {
-      'name': 'Dior Sauvage',
-      'price': '\$120.00',
-      'image': 'assets/images/imgs/Sauvage.png',
-      'rating': 4.8,
-      'isFavorite': false,
-    },
-    {
-      'name': 'YSL Libre',
-      'price': '\$135.00',
-      'image': 'assets/images/imgs/YSL Pink.png',
-      'rating': 4.6,
-      'isFavorite': true,
-    },
-    {
-      'name': 'Versace Crystal',
-      'price': '\$110.00',
-      'image': 'assets/images/imgs/Versace Pink.png',
-      'rating': 4.5,
-      'isFavorite': false,
-    },
-    {
-      'name': 'Chanel No.5',
-      'price': '\$130.00',
-      'image': 'assets/images/imgs/iconic No 5.png',
-      'rating': 4.9,
-      'isFavorite': false,
-    },
-    {
-      'name': 'Black Opium',
-      'price': '\$115.00',
-      'image': 'assets/images/imgs/Black Opium.png',
-      'rating': 4.7,
-      'isFavorite': true,
-    },
-    {
-      'name': 'Goucci',
-      'price': '\$125.00',
-      'image': 'assets/images/imgs/Goucci.png',
-      'rating': 4.4,
-      'isFavorite': false,
-    },
-  ];
+  final perfumes = PerfumesData.perfumes;
 
   @override
   Widget build(BuildContext context) {
@@ -453,6 +413,28 @@ class _HomePageState extends State<HomePage> {
                 child: Image.asset(perfume['image'], fit: BoxFit.contain),
               ),
             ),
+            Align(
+              alignment: Alignment.centerRight,
+              child: IconButton(
+                icon: Icon(
+                  perfume['isFavorite']
+                      ? Icons.favorite
+                      : Icons.favorite_border,
+                  color: const Color(0xFFE58AC0),
+                ),
+                onPressed: () {
+                  setState(() {
+                    perfume['isFavorite'] = !perfume['isFavorite'];
+
+                    if (perfume['isFavorite']) {
+                      FavoritesData.favorites.add(perfume);
+                    } else {
+                      FavoritesData.favorites.remove(perfume);
+                    }
+                  });
+                },
+              ),
+            ),
             const SizedBox(height: 8),
             Text(
               perfume['name'],
@@ -482,7 +464,12 @@ class _HomePageState extends State<HomePage> {
         children: [
           _navItem(Icons.home_filled, "Home", true),
           _navItem(Icons.grid_view, "Categories", false),
-          _navItem(Icons.favorite_border, "Favorites", false),
+          GestureDetector(
+            onTap: () => Navigator.push(context, MaterialPageRoute(
+              builder: (context) => const FavoritesPage(),
+            )),
+            child: _navItem(Icons.favorite_border, "Favorites", false),
+          ),
           _navItem(Icons.shopping_bag_outlined, "Cart", false),
           _navItem(Icons.person_outline, "Profile", false),
         ],

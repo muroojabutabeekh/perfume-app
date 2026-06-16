@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'product_details_page.dart';
+import 'favorites_data.dart';
+import 'perfumes_data.dart';
+
 
 class AllPerfumesPage extends StatefulWidget {
   final String? filterCategory;
@@ -17,136 +20,7 @@ class _AllPerfumesPageState extends State<AllPerfumesPage> {
 
   final List<String> categories = ['All', 'Women', 'Men', 'Unisex', 'Luxury'];
 
-  final List<Map<String, dynamic>> allPerfumes = [
-    {
-      'name': 'Dior Sauvage',
-      'price': '\$120.00',
-      'image': 'assets/images/imgs/Sauvage.png',
-      'rating': 4.8,
-      'isFavorite': false,
-      'category': 'Men',
-    },
-    {
-      'name': 'YSL Libre',
-      'price': '\$135.00',
-      'image': 'assets/images/imgs/YSL Pink.png',
-      'rating': 4.6,
-      'isFavorite': true,
-      'category': 'Women',
-    },
-    {
-      'name': 'Versace Crystal',
-      'price': '\$110.00',
-      'image': 'assets/images/imgs/Versace Pink.png',
-      'rating': 4.5,
-      'isFavorite': false,
-      'category': 'Women',
-    },
-    {
-      'name': 'Chanel No.5',
-      'price': '\$130.00',
-      'image': 'assets/images/imgs/iconic No 5.png',
-      'rating': 4.9,
-      'isFavorite': false,
-      'category': 'Luxury',
-    },
-    {
-      'name': 'Black Opium',
-      'price': '\$115.00',
-      'image': 'assets/images/imgs/Black Opium.png',
-      'rating': 4.7,
-      'isFavorite': true,
-      'category': 'Women',
-    },
-    {
-      'name': 'Goucci',
-      'price': '\$125.00',
-      'image': 'assets/images/imgs/Goucci.png',
-      'rating': 4.4,
-      'isFavorite': false,
-      'category': 'Unisex',
-    },
-    {
-      'name': 'Sanael',
-      'price': '\$95.00',
-      'image': 'assets/images/imgs/Sanael.png',
-      'rating': 4.3,
-      'isFavorite': false,
-      'category': 'Women',
-    },
-    {
-      'name': 'Sauvage 2',
-      'price': '\$140.00',
-      'image': 'assets/images/imgs/Sauvage2.png',
-      'rating': 4.7,
-      'isFavorite': false,
-      'category': 'Men',
-    },
-    {
-      'name': 'Paris Romance',
-      'price': '\$118.00',
-      'image': 'assets/images/imgs/Paris Romance.png',
-      'rating': 4.5,
-      'isFavorite': false,
-      'category': 'Women',
-    },
-    {
-      'name': 'Blue Chanel',
-      'price': '\$145.00',
-      'image': 'assets/images/imgs/Blue Chanel.png',
-      'rating': 4.8,
-      'isFavorite': false,
-      'category': 'Luxury',
-    },
-    {
-      'name': 'Embrace Gold',
-      'price': '\$160.00',
-      'image': 'assets/images/imgs/Embrace Gold.png',
-      'rating': 4.9,
-      'isFavorite': false,
-      'category': 'Luxury',
-    },
-    {
-      'name': 'Flower Explosion',
-      'price': '\$105.00',
-      'image': 'assets/images/imgs/Flower Explosion.png',
-      'rating': 4.4,
-      'isFavorite': false,
-      'category': 'Unisex',
-    },
-    {
-      'name': 'Playful Daisy',
-      'price': '\$98.00',
-      'image': 'assets/images/imgs/Playful Daisy.png',
-      'rating': 4.3,
-      'isFavorite': false,
-      'category': 'Women',
-    },
-    {
-      'name': 'Versace Yellow',
-      'price': '\$112.00',
-      'image': 'assets/images/imgs/Versace Yellow.png',
-      'rating': 4.5,
-      'isFavorite': false,
-      'category': 'Unisex',
-    },
-    {
-      'name': 'YSL White',
-      'price': '\$138.00',
-      'image': 'assets/images/imgs/YSL white.png',
-      'rating': 4.6,
-      'isFavorite': false,
-      'category': 'Men',
-    },
-    {
-      'name': 'Pink',
-      'price': '\$88.00',
-      'image': 'assets/images/imgs/pink.png',
-      'rating': 4.2,
-      'isFavorite': false,
-      'category': 'Women',
-    },
-  ];
+  final allPerfumes = PerfumesData.perfumes;
 
   @override
   void initState() {
@@ -353,10 +227,14 @@ class _AllPerfumesPageState extends State<AllPerfumesPage> {
                     child: GestureDetector(
                       onTap: () {
                         setState(() {
-                          final i = allPerfumes.indexOf(perfume);
-                          if (i != -1) {
-                            allPerfumes[i]['isFavorite'] =
-                            !allPerfumes[i]['isFavorite'];
+                          perfume['isFavorite'] = !perfume['isFavorite'];
+
+                          if (perfume['isFavorite']) {
+                            if (!FavoritesData.favorites.contains(perfume)) {
+                              FavoritesData.favorites.add(perfume);
+                            }
+                          } else {
+                            FavoritesData.favorites.remove(perfume);
                           }
                         });
                       },

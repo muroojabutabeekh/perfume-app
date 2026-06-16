@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'favorites_data.dart';
 
 class ProductDetailsPage extends StatefulWidget {
   final Map<String, dynamic> perfume;
@@ -57,7 +58,19 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                             color: isFavorite ? const Color(0xFFE58AC0) : Colors.white70,
                           ),
                           onPressed: () {
-                            setState(() => isFavorite = !isFavorite);
+                            setState(() {
+                              isFavorite = !isFavorite;
+
+                              widget.perfume['isFavorite'] = isFavorite;
+
+                              if (isFavorite) {
+                                if (!FavoritesData.favorites.contains(widget.perfume)) {
+                                  FavoritesData.favorites.add(widget.perfume);
+                                }
+                              } else {
+                                FavoritesData.favorites.remove(widget.perfume);
+                              }
+                            });
                           },
                         ),
                         IconButton(
@@ -270,7 +283,19 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                                   color: Colors.white,
                                 ),
                                 onPressed: () {
-                                  setState(() => isFavorite = !isFavorite);
+                                  setState(() {
+                                    isFavorite = !isFavorite;
+
+                                    widget.perfume['isFavorite'] = isFavorite;
+
+                                    if (isFavorite) {
+                                      if (!FavoritesData.favorites.contains(widget.perfume)) {
+                                        FavoritesData.favorites.add(widget.perfume);
+                                      }
+                                    } else {
+                                      FavoritesData.favorites.remove(widget.perfume);
+                                    }
+                                  });
                                 },
                               ),
                             ),
