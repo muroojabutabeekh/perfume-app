@@ -187,14 +187,14 @@ class _AllPerfumesPageState extends State<AllPerfumesPage> {
   Widget _buildPerfumeCard(int index) {
     final perfume = filteredPerfumes[index];
     return GestureDetector(
-      onTap: () {
-        Navigator.push(
+      onTap: () async {
+        await Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) =>
-                ProductDetailsPage(perfume: filteredPerfumes[index]),
+            builder: (context) => ProductDetailsPage(perfume: filteredPerfumes[index]),
           ),
         );
+        setState(() {}); // ← هاد بيحدث الصفحة لما ترجعي
       },
       child: Container(
         decoration: BoxDecoration(

@@ -1,18 +1,20 @@
 import 'package:flutter/material.dart';
 import 'product_details_page.dart';
 import 'all_perfumes_page.dart';
-import 'favorites_page.dart';
 import 'favorites_data.dart';
 import 'perfumes_data.dart';
+import 'cart_page.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+class HomePageContent extends StatefulWidget {
+
+  const HomePageContent({super.key});
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<HomePageContent> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePageContent> {
+
   int _selectedIndex = 0;
 
   final TextEditingController _searchController = TextEditingController();
@@ -106,8 +108,7 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
       ),
-      // هنا نستدعي البوتوم نافيجيشن المخصص الذي عدلناه سابقاً
-      bottomNavigationBar: _buildBottomNav(),
+
     );
   }
 
@@ -136,9 +137,12 @@ class _HomePageState extends State<HomePage> {
           Stack(
             children: [
               IconButton(
-                icon: const Icon(Icons.shopping_bag_outlined,
-                    color: Colors.white70),
-                onPressed: () {},
+                icon: const Icon(Icons.shopping_bag_outlined, color: Colors.white70),
+                onPressed: () {
+                  Navigator.push(context, MaterialPageRoute(
+                    builder: (context) => const CartPage(),
+                  ));
+                },
               ),
               Positioned(
                 right: 8,
@@ -390,13 +394,14 @@ class _HomePageState extends State<HomePage> {
   Widget _buildPerfumeCard(int index) {
     final perfume = _filteredPerfumes[index];
     return GestureDetector(                    // ← أضيفي هاد
-      onTap: () {
-        Navigator.push(
+      onTap: () async {
+        await Navigator.push(
           context,
           MaterialPageRoute(
             builder: (context) => ProductDetailsPage(perfume: _filteredPerfumes[index]),
           ),
         );
+        setState(() {}); // ← هاد بيحدث الهوم لما ترجعي
       },
       child: Container(                        // ← خليها child
         decoration: BoxDecoration(
@@ -452,40 +457,8 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  // ── Bottom Navigation Bar ──
-  Widget _buildBottomNav() {
-    return Container(
-      height: 70,
-      decoration: const BoxDecoration(
-        color: Color(0xFF1A0E2E), // لون داكن متناسق مع الخلفية
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          _navItem(Icons.home_filled, "Home", true),
-          _navItem(Icons.grid_view, "Categories", false),
-          GestureDetector(
-            onTap: () => Navigator.push(context, MaterialPageRoute(
-              builder: (context) => const FavoritesPage(),
-            )),
-            child: _navItem(Icons.favorite_border, "Favorites", false),
-          ),
-          _navItem(Icons.shopping_bag_outlined, "Cart", false),
-          _navItem(Icons.person_outline, "Profile", false),
-        ],
-      ),
-    );
-  }
-  Widget _navItem(IconData icon, String label, bool isSelected) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Icon(icon, color: isSelected ? const Color(0xFFE58AC0) : Colors.white38),
-        const SizedBox(height: 4),
-        Text(label, style: TextStyle(fontSize: 10, color: isSelected ? const Color(0xFFE58AC0) : Colors.white38)),
-      ],
-    );
-  }
+
+
 }
 
 

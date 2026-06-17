@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'favorites_data.dart';
+import 'cart_page.dart';
 
 class ProductDetailsPage extends StatefulWidget {
   final Map<String, dynamic> perfume;
@@ -149,9 +150,9 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                         child: Row(
                           children: [
                             ...List.generate(4, (i) => const Icon(
-                                Icons.star, color: Color(0xFFFFD700), size: 18)),
+                                Icons.star, color: Color(0x78D8B9D1), size: 18)),
                             const Icon(Icons.star_half,
-                                color: Color(0xFFFFD700), size: 18),
+                                color: Color(0x78D8B9D1), size: 18),
                             const SizedBox(width: 8),
                             Text(
                               '${perfume['rating']} (230 Reviews)',
@@ -248,10 +249,10 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                                     elevation: 0,
                                   ),
                                   onPressed: () {
+                                    CartData.addToCart(perfume, quantity);
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       SnackBar(
-                                        content: Text(
-                                            '${perfume['name']} added to cart!'),
+                                        content: Text('${perfume['name']} added to cart!'),
                                         backgroundColor: const Color(0xFFE58AC0),
                                       ),
                                     );
