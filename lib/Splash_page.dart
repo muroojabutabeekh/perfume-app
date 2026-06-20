@@ -41,7 +41,7 @@ class _SplashPageState extends State<SplashPage> {
         fit: StackFit.expand,
         children: [
           Image.asset(
-            'assets/images/perfume.png',
+            'assets/images/perfume2.png',
             fit: BoxFit.cover,
           ),
 
